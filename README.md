@@ -36,7 +36,7 @@ src/main/java/com/edufine/backend/
 
 ### User Management
 - User registration and authentication
-- Role-based access (Student, Instructor, Admin)
+- Role-based access (Student, Instructor, lecturer, LIC)
 - User profile management
 - Account activation/deactivation
 
@@ -62,8 +62,8 @@ src/main/java/com/edufine/backend/
 
 - **Framework**: Spring Boot 3.5.9
 - **Language**: Java 21
-- **Database**: H2 (development), configurable for production
-- **ORM**: Hibernate/JPA
+- **Database**: MongoDB
+- **ORM**: Mongoose
 - **Build Tool**: Maven
 - **Architecture**: Layered Architecture (Controller → Service → Repository)
 
