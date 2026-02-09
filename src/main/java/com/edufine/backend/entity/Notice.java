@@ -20,6 +20,12 @@ public class Notice {
     private String content;
 
     @Field
+    private String visibleTo;
+
+    @Field
+    private String createdBy;
+
+    @Field
     private boolean active = true;
 
     @Field
@@ -33,6 +39,7 @@ public class Notice {
     public Notice(String title, String content) {
         this.title = title;
         this.content = content;
+        this.visibleTo = "ALL";
         this.active = true;
         this.createdAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();
@@ -46,6 +53,12 @@ public class Notice {
 
     public String getContent() { return content; }
     public void setContent(String content) { this.content = content; }
+
+    public String getVisibleTo() { return visibleTo; }
+    public void setVisibleTo(String visibleTo) { this.visibleTo = visibleTo; }
+
+    public String getCreatedBy() { return createdBy; }
+    public void setCreatedBy(String createdBy) { this.createdBy = createdBy; }
 
     public boolean isActive() { return active; }
     public void setActive(boolean active) { this.active = active; }

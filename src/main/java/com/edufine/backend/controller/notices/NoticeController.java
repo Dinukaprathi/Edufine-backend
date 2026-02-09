@@ -2,6 +2,7 @@ package com.edufine.backend.controller.notices;
 
 import com.edufine.backend.dto.NoticeRequestDto;
 import com.edufine.backend.dto.NoticeResponseDto;
+import com.edufine.backend.dto.NoticeStatusRequestDto;
 import com.edufine.backend.service.NoticeService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,6 +67,14 @@ public class NoticeController {
     @PreAuthorize("hasAnyRole('SUPER_ADMIN','LIC','LECTURER','INSTRUCTOR','STAFF')")
     public ResponseEntity<Void> activate(@PathVariable String id) {
         noticeService.activateNotice(id);
+        return ResponseEntity.ok().build();
+    }
+
+    @PatchMapping("/{id}/status")
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN','LIC','LECTURER','INSTRUCTOR','STAFF')")
+    public ResponseEntity<Void> updateStatus(@PathVariable String id,
+                                             @Valid @RequestBody NoticeStatusRequestDto requestDto) {
+        noticeService.updateNoticeStatus(id, requestDto.getActive());
         return ResponseEntity.ok().build();
     }
 }

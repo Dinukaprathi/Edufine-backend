@@ -405,6 +405,7 @@ public class DatabaseSeeder implements CommandLineRunner {
 
     private Notice createNoticeEntity(String title, String content, String targetAudience, String courseId) {
         Notice notice = new Notice(title, content);
+        notice.setVisibleTo(targetAudience);
         notice.setActive(true);
         notice.setCreatedAt(LocalDateTime.now());
         notice.setUpdatedAt(LocalDateTime.now());

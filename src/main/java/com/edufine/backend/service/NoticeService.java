@@ -27,6 +27,9 @@ public class NoticeService {
 
     public NoticeResponseDto createNotice(NoticeRequestDto requestDto) {
         Notice notice = noticeMapper.toEntity(requestDto);
+        if (notice.getVisibleTo() == null || notice.getVisibleTo().isBlank()) {
+            notice.setVisibleTo("ALL");
+        }
         notice.setActive(true);
         notice.setCreatedAt(LocalDateTime.now());
         notice.setUpdatedAt(LocalDateTime.now());
@@ -84,6 +87,15 @@ public class NoticeService {
         Notice notice = noticeRepository.findById(objectId)
                 .orElseThrow(() -> new RuntimeException("Notice not found"));
         notice.setActive(true);
+        notice.setUpdatedAt(LocalDateTime.now());
+        noticeRepository.save(notice);
+    }
+
+    public void updateNoticeStatus(String id, boolean active) {
+        ObjectId objectId = new ObjectId(id);
+        Notice notice = noticeRepository.findById(objectId)
+                .orElseThrow(() -> new RuntimeException("Notice not found"));
+        notice.setActive(active);
         notice.setUpdatedAt(LocalDateTime.now());
         noticeRepository.save(notice);
     }

@@ -18,10 +18,12 @@ public interface NoticeMapper {
     @Mapping(target = "updatedAt", ignore = true)
     Notice toEntity(NoticeRequestDto requestDto);
 
+    @Mapping(target = "id", expression = "java(notice.getId() != null ? notice.getId().toHexString() : null)")
     NoticeResponseDto toResponseDto(Notice notice);
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "active", ignore = true)
+    @Mapping(target = "createdBy", ignore = true)
     @Mapping(target = "createdAt", ignore = true)
     @Mapping(target = "updatedAt", ignore = true)
     Notice updateEntityFromDto(NoticeRequestDto requestDto, @org.mapstruct.MappingTarget Notice notice);

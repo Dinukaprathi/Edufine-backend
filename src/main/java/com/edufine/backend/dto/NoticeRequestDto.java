@@ -13,6 +13,12 @@ public class NoticeRequestDto {
     @Size(max = 5000)
     private String content;
 
+    @Size(max = 50)
+    private String visibleTo;
+
+    @Size(max = 100)
+    private String createdBy;
+
     public String getTitle() {
         return title;
     }
@@ -27,5 +33,21 @@ public class NoticeRequestDto {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public String getVisibleTo() {
+        return visibleTo;
+    }
+
+    public void setVisibleTo(String visibleTo) {
+        this.visibleTo = visibleTo;
+    }
+
+    public String getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(String createdBy) {
+        this.createdBy = createdBy;
     }
 }

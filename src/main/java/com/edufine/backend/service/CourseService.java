@@ -1,5 +1,6 @@
 package com.edufine.backend.service;
 
+import com.edufine.backend.dto.CourseRequestDto;
 import com.edufine.backend.dto.CourseResponseDto;
 import com.edufine.backend.dto.LessonResponseDto;
 import com.edufine.backend.dto.ModuleResponseDto;
@@ -22,6 +23,8 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.Map;
 import java.util.LinkedHashMap;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 @Service
 @Transactional
@@ -126,5 +129,49 @@ public class CourseService {
         return courseRepository.findAll().stream()
                 .map(this::mapCourseWithChildren)
                 .collect(Collectors.toList());
+    }
+
+    public CourseResponseDto createCourse(CourseRequestDto requestDto) {
+        if (courseRepository.findByCode(requestDto.getCode()).isPresent()) {
+            throw new RuntimeException("Course code already exists");
+        }
+
+        Course course = new Course();
+        course.setCode(requestDto.getCode());
+        course.setName(requestDto.getName());
+        course.setDurationInYears(requestDto.getDurationInYears());
+        course.setDescription(requestDto.getDescription());
+        course.setTotalCredits(requestDto.getTotalCredits());
+        course.setIsActive(requestDto.getIsActive());
+        course.setModuleIds(new ArrayList<>());
+        course.setCreatedAt(LocalDateTime.now());
+        course.setUpdatedAt(LocalDateTime.now());
+
+        Course saved = courseRepository.save(course);
+        return mapCourseWithChildren(saved);
+    }
+
+    public CourseResponseDto updateCourse(String id, CourseRequestDto requestDto) {
+        ObjectId objectId = new ObjectId(id);
+        Course course = courseRepository.findById(objectId)
+                .orElseThrow(() -> new RuntimeException("Course not found"));
+
+        course.setCode(requestDto.getCode());
+        course.setName(requestDto.getName());
+        course.setDurationInYears(requestDto.getDurationInYears());
+        course.setDescription(requestDto.getDescription());
+        course.setTotalCredits(requestDto.getTotalCredits());
+        course.setIsActive(requestDto.getIsActive());
+        course.setUpdatedAt(LocalDateTime.now());
+
+        Course saved = courseRepository.save(course);
+        return mapCourseWithChildren(saved);
+    }
+
+    public void deleteCourse(String id) {
+        ObjectId objectId = new ObjectId(id);
+        Course course = courseRepository.findById(objectId)
+                .orElseThrow(() -> new RuntimeException("Course not found"));
+        courseRepository.delete(course);
     }
 }

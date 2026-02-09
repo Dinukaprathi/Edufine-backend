@@ -11,8 +11,6 @@ import com.edufine.backend.security.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -41,14 +39,12 @@ public class AuthService {
     private PasswordEncoder passwordEncoder;
 
     public LoginResponse authenticateUser(LoginRequest loginRequest) {
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        loginRequest.getUsername(),
-                        loginRequest.getPassword()
-                )
+        authenticationManager.authenticate(
+            new UsernamePasswordAuthenticationToken(
+                loginRequest.getUsername(),
+                loginRequest.getPassword()
+            )
         );
-
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 
         User user = userRepository.findByUsername(loginRequest.getUsername())
                 .orElseThrow(() -> new RuntimeException("User not found"));
@@ -72,7 +68,7 @@ public class AuthService {
             throw new RuntimeException("User role is not authorized for authentication");
         }
 
-        String jwt = jwtUtil.generateToken(userDetails);
+        String jwt = jwtUtil.generateToken(user.getUsername(), user.getRole().name());
 
         LoginResponse response = new LoginResponse(jwt, user.getUsername(), user.getRole().name());
         response.setPermissions(getPermissionsForRole(user.getRole()));
